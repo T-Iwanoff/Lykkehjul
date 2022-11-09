@@ -9,21 +9,20 @@ val words = listOf(
     Category(
         "Disney film",
         arrayOf(
-            "Shrek",
-            "Syng",
-            "Minions",
-            "Den lille havfrue",
-            "Toy Story"
+            "SHREK",
+            "MINIONS",
+            "DEN LILLE HAVFRUE",
+            "TOY STORY"
         )
     ),
-    Category(
+    /*Category(
         "Byer",
         arrayOf(
-            "København",
-            "Næstved",
-            "Odense",
-            "Sønderborg",
-            "Skive"
+            "KØBENHAVN",
+            "NÆSTVED",
+            "ODENSE",
+            "SØNDERBORG",
+            "SKIVE"
         )
-    )
+    )*/
 )
