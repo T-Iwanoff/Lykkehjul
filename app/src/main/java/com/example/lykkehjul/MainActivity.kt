@@ -39,6 +39,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * The main game screen.
+ */
 @Composable
 fun GameScreen() {
     val selector = WordSelector()
@@ -76,25 +79,56 @@ fun GameScreen() {
     }
 }
 
+/**
+ * Composible that takes a word, creates a handler to keep track of
+ * how many letters has been revealed, and displays the word in a row.
+ * Automatically breaks up words longer than 10 characters into multiple rows.
+ */
 @Composable
 fun WordDisplay(word: String) {
-    val handler = WordHandler(word)
+    val handler = WordHandler(word) //Create a word handler
     val wordArray = handler.getWord()
-    val rows: Int = (wordArray.size + 9) / 10 //Number of rows with 10 letters on each row. Formula found here https://stackoverflow.com/questions/17944/how-to-round-up-the-result-of-integer-division
-    var letterIndex: Int = 0
-    Column(modifier = Modifier.fillMaxWidth()) {
-        for (row in 1..rows) {
+    var rows: Int = (wordArray.size + 9) / 10 //Number of rows with 10 letters on each row. Formula found here https://stackoverflow.com/questions/17944/how-to-round-up-the-result-of-integer-division
+    var charIndex = 0 //Creating an index for the letters that isn't dependent on the rows
+    Column(modifier = Modifier.fillMaxWidth()) { //a column to contain the rows of letters
+        for (row in 1..rows) { //Creating the appropriate number of rows
             Row(modifier = Modifier
                 .padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 5.dp)
                 .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 for (i in 1..10) {
-                    LetterCard(letter = wordArray[letterIndex])
-                    if (letterIndex != wordArray.lastIndex)
+                    /* On the last 5 characters of each row but the last, check if there is a space.
+                       If there is, immediately cut off the word. If not, put a hyphen in the 10th
+                       character's place. If moving the rest of the characters to the next row would
+                       make the last row overflow, increase the number of rows by one. */
+                    if (i > 5 && rows > row) {
+                        if (wordArray[charIndex].char == ' ') { //Check for space
+                            if (((wordArray.size + 9 + (10-i)) / 10) > rows) { //Check whether the last row would overflow
+                                rows++
+                            }
+                            charIndex++ //Since a linebreak still counts as a space, increment the counter
+                            break
+                        }
+                        if (i == 10) { //Put a hyphen in the 10th spot. Don't increment the char counter
+                            Text(
+                                text = "-",
+                                fontSize = 30.sp
+                            )
+                            if (((wordArray.size + 9 + (10-i)) / 10) > rows) { //Check whether the last row would overflow
+                                rows++
+                            }
+                            break
+                        }
+                    }
+
+                    //If neither of the above cases apply, add a character
+                    LetterCard(letter = wordArray[charIndex])
+                    if (charIndex != wordArray.lastIndex && i < 10 && wordArray[charIndex+1].char != ' ')
+                        //If this character isn't the last and the next character isn't a space, add a spacer
                         Spacer(modifier = Modifier.width(20.dp))
-                    else break
-                    letterIndex++
+                    if (charIndex == wordArray.lastIndex) break //If this is the last character
+                    charIndex++
                 }
             }
         }
@@ -105,11 +139,11 @@ fun WordDisplay(word: String) {
 
 @Composable
 fun LetterCard(letter: Letter) {
-    if (letter.char == ' ') {
-        //Spacer(modifier = Modifier.width(20.dp))
+    if (letter.char == ' ') { //If the character is a space, add a spacer instead
+        Spacer(modifier = Modifier.width(20.dp))
     }
     else {
-        Text(
+        Text( //If the character is hidden, show an underscore. Otherwise, show the char.
             text = if (letter.hidden) "_" else letter.char.toString(),
             fontSize = 30.sp
         )

@@ -12,7 +12,7 @@ val words = listOf(
             "SHREK",
             "MINIONS",
             "DEN LILLE HAVFRUE",
-            "TOY STORY"
+            "TOY STORY",
         )
     ),
     /*Category(
