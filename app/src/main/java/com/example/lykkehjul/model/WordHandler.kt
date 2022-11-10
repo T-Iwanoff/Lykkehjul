@@ -24,7 +24,28 @@ class WordHandler(word: String) {
         return wordArray
     }
 
-    fun showLetter(letterPos: Int) {
+    fun revealLetter(letterPos: Int) {
         wordArray[letterPos].hidden = false
+    }
+
+    fun revealLetter(char: Char): Int {
+        var count = 0
+        for (letter in wordArray) {
+            if (letter.char == char) {
+                count++
+                letter.hidden = false
+            }
+        }
+        return count
+    }
+
+    fun countLetter(char: Char): Int {
+        var count = 0
+        for (letter in wordArray) {
+            if (letter.char == char) {
+                count++
+            }
+        }
+        return count
     }
 }

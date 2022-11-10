@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lykkehjul.data.specialChar
 import com.example.lykkehjul.model.Letter
 import com.example.lykkehjul.model.WordHandler
 import com.example.lykkehjul.ui.theme.LykkehjulTheme
@@ -115,7 +116,7 @@ fun WordDisplay(word: String) {
                                 text = "-",
                                 fontSize = 30.sp
                             )
-                            if (((wordArray.size + 9 + (10-i)) / 10) > rows) { //Check whether the last row would overflow
+                            if (((wordArray.size + 9 + (11-i)) / 10) > rows) { //Check whether the last row would overflow
                                 rows++
                             }
                             break
@@ -143,8 +144,8 @@ fun LetterCard(letter: Letter) {
         Spacer(modifier = Modifier.width(20.dp))
     }
     else {
-        Text( //If the character is hidden, show an underscore. Otherwise, show the char.
-            text = if (letter.hidden) "_" else letter.char.toString(),
+        Text( //If the character is hidden, show an underscore. Otherwise, show the char. Certain characters are always visible
+            text = if (letter.hidden && !specialChar.contains(letter.char)) "_" else letter.char.toString(),
             fontSize = 30.sp
         )
     }

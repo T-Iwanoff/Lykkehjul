@@ -27,13 +27,6 @@ class WordSelector() {
         findWord()
     }
 
-    fun getWordArray(): Array<Char> {
-        val chars: Array<Char> = Array(word.length) {
-            i -> word.get(i)
-        }
-        return chars
-    }
-
     fun getCategory(): String {
         return words[category].name
     }
